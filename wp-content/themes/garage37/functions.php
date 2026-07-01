@@ -20,16 +20,24 @@ add_action( 'after_setup_theme', function () {
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
-	// W trybie deweloperskim (SCRIPT_DEBUG) ładujemy źródła; w produkcji — pliki .min.
+	// CSS jest inline'owany w <head> (g37 wp_head) — bez osobnego, blokującego żądania.
+	// JS w stopce; w trybie SCRIPT_DEBUG ładujemy źródło zamiast .min.
 	$min = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 	$uri = get_template_directory_uri();
-	wp_enqueue_style( 'garage37', $uri . "/assets/css/main{$min}.css", array(), G37_VER );
 	wp_enqueue_script( 'garage37-cookie', $uri . "/assets/js/cookie{$min}.js", array(), G37_VER, true );
 	wp_localize_script( 'garage37-cookie', 'G37', array(
 		'gtmId' => trim( (string) g37( 'gtm_id' ) ),
 		'gaId'  => trim( (string) g37( 'ga_id' ) ),
 	) );
 } );
+
+// Ładujemy skrypt stopki z atrybutem defer.
+add_filter( 'script_loader_tag', function ( $tag, $handle ) {
+	if ( 'garage37-cookie' === $handle && false === strpos( $tag, ' defer' ) ) {
+		$tag = str_replace( ' src=', ' defer src=', $tag );
+	}
+	return $tag;
+}, 10, 2 );
 
 /* -------------------------------------------------------------------------
  * Content fields (single source of truth: defaults + Customizer registration)
@@ -230,10 +238,26 @@ add_action( 'wp_head', function () {
 	}
 	$url = home_url( '/' );
 
+	$uri = get_template_directory_uri();
+	$tpl = get_template_directory();
+
 	echo "\n";
-	echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( get_template_directory_uri() . '/assets/img/favicon.svg' ) . '">' . "\n";
-	echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
-	echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+	echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( $uri . '/assets/img/favicon.svg' ) . '">' . "\n";
+
+	// Preload samohostowanych fontów (subset łaciński), by tekst renderował się od razu.
+	foreach ( array( 'archivo', 'jetbrainsmono', 'racingsans' ) as $font ) {
+		echo '<link rel="preload" as="font" type="font/woff2" crossorigin href="'
+			. esc_url( $uri . "/assets/fonts/{$font}.woff2" ) . '">' . "\n";
+	}
+
+	// Krytyczny CSS inline (~2 KB) — brak blokującego renderowanie żądania.
+	$css_file = $tpl . '/assets/css/main.min.css';
+	$css = is_readable( $css_file ) ? file_get_contents( $css_file ) : '';
+	if ( '' !== $css ) {
+		$css = str_replace( 'url(../fonts/', 'url(' . $uri . '/assets/fonts/', $css );
+		echo '<style id="garage37-css">' . $css . "</style>\n";
+	}
+
 	if ( $desc !== '' ) {
 		echo '<meta name="description" content="' . esc_attr( $desc ) . '">' . "\n";
 	}

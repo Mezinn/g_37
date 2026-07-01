@@ -3,10 +3,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $tel      = g37_tel();
 $asset    = get_template_directory_uri() . '/assets/img';
-$onas_img = trim( (string) g37( 'onas_image' ) );
-if ( '' === $onas_img ) {
-	$onas_img = $asset . '/about.jpg';
-}
+$onas_custom = ( '' !== trim( (string) g37( 'onas_image' ) ) );
+$onas_img    = $onas_custom ? trim( (string) g37( 'onas_image' ) ) : $asset . '/about.jpg';
 
 // Zbierz widoczne usługi (pusty tytuł = ukryta pozycja).
 $services = array();
@@ -45,7 +43,10 @@ $srv_count = count( $services );
 
 <!-- image band -->
 <div class="g-band" style="height:340px;border-bottom:2px solid #0d0d0d;overflow:hidden;background:#e5e2db">
-<img src="<?php echo esc_url( $asset . '/hero.jpg' ); ?>" alt="Serwis Garage 37" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;display:block;filter:grayscale(1) contrast(1.06)" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&amp;fit=crop&amp;w=1700&amp;q=80'">
+<picture>
+<source srcset="<?php echo esc_url( $asset . '/hero.webp' ); ?>" type="image/webp">
+<img src="<?php echo esc_url( $asset . '/hero.jpg' ); ?>" alt="Serwis Garage 37" width="1400" height="932" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center 60%;display:block;filter:grayscale(1) contrast(1.06)" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&amp;fit=crop&amp;w=1700&amp;q=80'">
+</picture>
 </div>
 
 <!-- stats -->
@@ -103,7 +104,9 @@ $srv_count = count( $services );
 <?php endfor; ?>
 </div>
 </div>
-<div style="flex:1 1 380px;min-height:360px;overflow:hidden;background:#111"><img src="<?php echo esc_url( $onas_img ); ?>" alt="Garage 37" style="width:100%;height:100%;min-height:360px;object-fit:cover;display:block;filter:grayscale(1) contrast(1.06)" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=1100&amp;q=80'"></div>
+<div style="flex:1 1 380px;min-height:360px;overflow:hidden;background:#111"><picture>
+<?php if ( ! $onas_custom ) : ?><source srcset="<?php echo esc_url( $asset . '/about.webp' ); ?>" type="image/webp"><?php endif; ?>
+<img src="<?php echo esc_url( $onas_img ); ?>" alt="Garage 37" width="1100" height="1375" loading="lazy" decoding="async" style="width:100%;height:100%;min-height:360px;object-fit:cover;display:block;filter:grayscale(1) contrast(1.06)" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&amp;fit=crop&amp;w=1100&amp;q=80'"></picture></div>
 </div>
 
 <!-- CTA band -->
