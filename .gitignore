@@ -1,0 +1,7 @@
+# zależności i artefakty builda
+node_modules/
+dist/
+
+# rdzeń WordPressa i baza żyją w wolumenach Dockera, nie w repo
+*.log
+.DS_Store
