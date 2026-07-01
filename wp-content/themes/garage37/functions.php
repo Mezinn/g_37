@@ -26,7 +26,8 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'garage37', $uri . "/assets/css/main{$min}.css", array(), G37_VER );
 	wp_enqueue_script( 'garage37-cookie', $uri . "/assets/js/cookie{$min}.js", array(), G37_VER, true );
 	wp_localize_script( 'garage37-cookie', 'G37', array(
-		'gaId' => trim( (string) g37( 'ga_id' ) ),
+		'gtmId' => trim( (string) g37( 'gtm_id' ) ),
+		'gaId'  => trim( (string) g37( 'ga_id' ) ),
 	) );
 } );
 
@@ -117,7 +118,8 @@ function g37_fields() {
 		'og_image'  => array( 'section' => 'g37_seo', 'type' => 'image',    'label' => 'Obraz do udostępniania (OG image)', 'default' => '' ),
 
 		// --- Analityka ---
-		'ga_id' => array( 'section' => 'g37_analytics', 'type' => 'text', 'label' => 'ID Google Analytics (G-…)', 'default' => '' ),
+		'gtm_id' => array( 'section' => 'g37_analytics', 'type' => 'text', 'label' => 'ID Google Tag Manager (GTM-…)', 'default' => 'GTM-5Q2V4J23' ),
+		'ga_id'  => array( 'section' => 'g37_analytics', 'type' => 'text', 'label' => 'ID Google Analytics 4 (G-…, opcjonalnie)', 'default' => '' ),
 	);
 
 	return $fields;
