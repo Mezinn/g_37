@@ -238,7 +238,7 @@ a{color:inherit;text-decoration:none}
 <div class="g-sec g-hero-row" style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:30px 44px;border-top:2px solid #0d0d0d;background:#0d0d0d;color:#f1efea">
 <a href="/" aria-label="Garage 37 — strona główna" style="display:block"><svg height="40" viewBox="0 0 210 46" xmlns="http://www.w3.org/2000/svg" style="display:block" role="img" aria-label="Garage 37"><text x="0" y="35" textLength="206" lengthAdjust="spacingAndGlyphs" font-family="'Racing Sans One',Archivo,sans-serif" font-size="36" fill="#f1efea">GARAGE <tspan fill="#e10600">37</tspan></text></svg></a>
 <div style="display:flex;flex-direction:column;gap:7px;align-items:flex-end">
-<div style="font:600 12px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:#8a8578">© 2025 Garage 37 — Wszelkie prawa zastrzeżone · Gliwice</div>
+<div style="font:600 12px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:#8a8578">© <span id="g37-year">2026</span> Garage 37 — Wszelkie prawa zastrzeżone · Gliwice</div>
 <button id="g37-reopen" style="cursor:pointer;background:none;border:0;color:#8a8578;font:600 11px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;text-decoration:underline;padding:0">Ustawienia cookies</button>
 </div>
 </div>
@@ -257,7 +257,7 @@ a{color:inherit;text-decoration:none}
 </div>
 </div>
 </div>
-<script>window.G37={gtmId:'GTM-5Q2V4J23',gaId:''};</script>
+<script>window.G37={gtmId:'GTM-5Q2V4J23',gaId:''};(function(y){if(y)y.textContent=new Date().getFullYear();})(document.getElementById('g37-year'));</script>
 <script src="assets/js/cookie.js" defer></script>
 </body>
 </html>
